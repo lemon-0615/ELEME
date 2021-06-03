@@ -448,5 +448,6 @@ export const reqShopGoods = () => ajax('/goods')
           '^/api': ''
         }
       }
+      },
   ```
-    },   
+     
