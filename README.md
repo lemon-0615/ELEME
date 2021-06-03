@@ -433,3 +433,20 @@ export const reqShopRatings = () => ajax('/ratings')
  */
 export const reqShopGoods = () => ajax('/goods')
 ```
+
+### 异步数据
+1. 封装ajax: 
+   * promise+axios封装ajax请求的函数
+   * 封装每个接口对应的请求函数(能根据接口定义ajax请求函数)
+   * 解决ajax的跨越域问题: 配置代理, 对代理的理解
+ ```
+ proxyTable: {
+      '/api': { // 匹配所有以 '/api'开头的请求路径
+        target: 'http://localhost:4000', // 代理目标的基础路径
+        changeOrigin: true, // 支持跨域
+        pathRewrite: {// 重写路径: 去掉路径中开头的'/api'
+          '^/api': ''
+        }
+      }
+  ```
+    },   
