@@ -546,3 +546,4 @@ export const reqShopGoods = () => ajax('/goods')
    
         1). 使用回调+$nextTick()   
         2). 使用watch+$nextTick()	
+    * vm.$nextTick([callback]) 用法：将回调延迟到下次DOM更新循环之后执行。在修改数据之后立即使用它，然后等待DOM更新。它跟全局方法Vue.nextTick一样，不同的是回调的this自动绑定到调用它的实例上。
