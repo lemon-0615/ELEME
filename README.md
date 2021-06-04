@@ -531,19 +531,61 @@ export const reqShopGoods = () => ajax('/goods')
       })
    ```
   * main.js: 配置store   
- 3. 组件异步显示数据
-    * 在mounted()通过$store.dispatch('actionName')来异步获取后台数据到state中
-    * mapState(['xxx'])读取state中数据到组件中
-    * 在模板中显示xxx的数据
- 4. 模板中显示数据的来源
-    * data: 自身的数据(内部改变)
-    * props: 外部传入的数据(外部改变)
-    * computed: 根据data/props/别的compute/state/getters
- 5. 异步显示轮播图
-    * 通过vuex获取foodCategorys数组(发请求, 读取)
-    * 对数据进行整合计算(一维变为特定的二维数组)
-    * 使用Swiper显示轮播, 如何在界面更新之后创建Swiper对象?
+3. 组件异步显示数据
+   * 在mounted()通过$store.dispatch('actionName')来异步获取后台数据到state中
+   * mapState(['xxx'])读取state中数据到组件中
+   * 在模板中显示xxx的数据
+4. 模板中显示数据的来源
+   * data: 自身的数据(内部改变)
+   * props: 外部传入的数据(外部改变)
+   * computed: 根据data/props/别的compute/state/getters
+5. 异步显示轮播图
+   * 通过vuex获取foodCategorys数组(发请求, 读取)
+   * 对数据进行整合计算(一维变为特定的二维数组)
+   * 使用Swiper显示轮播, 如何在界面更新之后创建Swiper对象?
    
         1). 使用回调+$nextTick()   
         2). 使用watch+$nextTick()	
     * vm.$nextTick([callback]) 用法：将回调延迟到下次DOM更新循环之后执行。在修改数据之后立即使用它，然后等待DOM更新。它跟全局方法Vue.nextTick一样，不同的是回调的this自动绑定到调用它的实例上。
+    * 注意：一维变为特定的二维数组， 根据categorys一维数组生成一个2维数组，小数组中的元素个数最大是8
+   ```
+    categorysArr () {
+      const {categorys} = this
+      // 准备空的2维数组
+      const arr = []
+      // 准备一个小数组(最大长度为8)
+      let minArr = []
+      // 遍历categorys
+      categorys.forEach(c => {
+      // 如果当前小数组已经满了, 创建一个新的
+        if (minArr.length === 8) {
+          minArr = []
+        }
+        // 如果minArr是空的, 将小数组保存到大数组中
+        if (minArr.length === 0) {
+          arr.push(minArr)
+        }
+        // 将当前分类保存到小数组中
+        minArr.push(c)
+      })
+      return arr
+    }
+   ```
+    * 注意：监视列表categorys函数， categorys数组中有了数据，在异步更新界面之前执行
+ ```
+  watch: {
+    categorys (value) { // categorys数组中有了数据，在异步更新界面之前执行
+    /* eslint-disable no-new */
+    // 界面更新就立即创建Swiper对象
+      this.$nextTick(() => { // 一旦完成界面更新, 立即调用(此条语句要写在数据更新之后)
+      // 创建一个Swiper实例对象, 来实现轮播
+        new Swiper('.swiper-container', {
+          loop: true,
+          pagination: {
+            el: '.swiper-pagination'
+          }
+        })
+      })
+    }
+  },
+```
