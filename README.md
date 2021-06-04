@@ -572,7 +572,7 @@ export const reqShopGoods = () => ajax('/goods')
     }
    ```
     * 注意：监视列表categorys函数， categorys数组中有了数据，在异步更新界面之前执行
- ```
+  ```
   watch: {
     categorys (value) { // categorys数组中有了数据，在异步更新界面之前执行
     /* eslint-disable no-new */
@@ -588,4 +588,4 @@ export const reqShopGoods = () => ajax('/goods')
       })
     }
   },
-```
+ ```
