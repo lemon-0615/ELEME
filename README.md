@@ -474,3 +474,69 @@ export const reqShopGoods = () => ajax('/goods')
       })
     ```
      * 设计state: 从后台获取的数据
+  ```
+ export default {
+    latitude: 40.10038, // 纬度
+    longitude: 116.36867, // 经度
+    address: {}, //地址相关信息对象
+    categorys: [], // 食品分类数组
+    shops: [], // 商家数组
+    userInfo: {}, // 用户信息
+    goods: [], // 商品列表
+    ratings: [], // 商家评价列表
+    info: {}, // 商家信息
+    cartFoods: [], // 购物车中食物的列表
+    searchShops: [], // 搜索得到的商家列表
+}
+  ```
+  
+   * 实现actions: 
+        * 定义异步action: async/await
+        * 流程: 发ajax获取数据, commit给mutation     
+      ```
+        // 异步获取地址
+        async getAddress ({commit, state}) {
+        // 发送异步ajax请求
+          const geohash = state.latitude + ',' + state.longitude
+          const result = await reqAddress(geohash)
+          // 提交一个mutation
+          if (result.code === 0) {
+            const address = result.data
+            commit(RECEIVE_ADDRESS, {address})
+          }
+        }     
+      ```
+   * 实现mutations: 给状态赋值  
+     ```
+    [RECEIVE_ADDRESS] (state, {address}) {
+      state.address = address
+     },
+     ```
+   * 实现index: 创建store对象
+  ```
+   /* vuex最核心的管理对象store */
+      import Vue from 'vue'
+      import Vuex from 'vuex'
+      import state from './state'
+      import mutations from './mutations'
+      import actions from './actions.js'
+      import getters from './getters'
+
+      Vue.use(Vuex)
+
+      export default new Vuex.Store({
+        state,
+        mutations,
+        actions,
+        getters
+      })
+   ```
+  * main.js: 配置store   
+ 3. 组件异步显示数据
+    * 在mounted()通过$store.dispatch('actionName')来异步获取后台数据到state中
+    * mapState(['xxx'])读取state中数据到组件中
+    * 在模板中显示xxx的数据
+ 4.模板中显示数据的来源
+    * data: 自身的数据(内部改变)
+    * props: 外部传入的数据(外部改变)
+    * computed: 根据data/props/别的compute/state/getters
