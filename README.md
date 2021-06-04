@@ -434,7 +434,7 @@ export const reqShopRatings = () => ajax('/ratings')
 export const reqShopGoods = () => ajax('/goods')
 ```
 
-### 异步数据
+### 异步处理
 1. 封装ajax: 
    * promise+axios封装ajax请求的函数
    * 封装每个接口对应的请求函数(能根据接口定义ajax请求函数)
@@ -450,4 +450,9 @@ export const reqShopGoods = () => ajax('/goods')
       }
       },
   ```
-     
+2.异步显示
+  * 用vuex管理从后台获取的状态数据
+  * 下载vuex
+  * 首页需要管理的数据：当前地址，食物分类轮播列表，商家列表
+  * vuex编码
+     * 创建所有相关的模块: store/index|state|mutations|actions|getters|mutation-types 
