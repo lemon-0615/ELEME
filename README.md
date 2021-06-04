@@ -104,7 +104,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
     </a>
   </div>
 </template>
-
 <script>
 export default {
   methods: {
@@ -508,7 +507,7 @@ export const reqShopGoods = () => ajax('/goods')
       ```
    * 实现mutations: 给状态赋值  
      ```
-    [RECEIVE_ADDRESS] (state, {address}) {
+     [RECEIVE_ADDRESS] (state, {address}) {
       state.address = address
      },
      ```
@@ -544,5 +543,6 @@ export const reqShopGoods = () => ajax('/goods')
     * 通过vuex获取foodCategorys数组(发请求, 读取)
     * 对数据进行整合计算(一维变为特定的二维数组)
     * 使用Swiper显示轮播, 如何在界面更新之后创建Swiper对象?
+   
         1). 使用回调+$nextTick()   
         2). 使用watch+$nextTick()	
