@@ -456,3 +456,21 @@ export const reqShopGoods = () => ajax('/goods')
   * 首页需要管理的数据：当前地址，食物分类轮播列表，商家列表
   * vuex编码
      * 创建所有相关的模块: store/index|state|mutations|actions|getters|mutation-types 
+     * vuex最核心的管理对象store
+      ```
+     import Vue from 'vue'
+     import Vuex from 'vuex'
+     import state from './state'
+     import mutations from './mutations'
+     import actions from './actions.js'
+     import getters from './getters'
+     Vue.use(Vuex)
+
+     export default new Vuex.Store({
+      state,
+      mutations,
+      actions,
+      getters
+      })
+    ```
+     * 设计state: 从后台获取的数据
