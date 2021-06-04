@@ -536,7 +536,13 @@ export const reqShopGoods = () => ajax('/goods')
     * 在mounted()通过$store.dispatch('actionName')来异步获取后台数据到state中
     * mapState(['xxx'])读取state中数据到组件中
     * 在模板中显示xxx的数据
- 4.模板中显示数据的来源
+ 4. 模板中显示数据的来源
     * data: 自身的数据(内部改变)
     * props: 外部传入的数据(外部改变)
     * computed: 根据data/props/别的compute/state/getters
+ 5. 异步显示轮播图
+    * 通过vuex获取foodCategorys数组(发请求, 读取)
+    * 对数据进行整合计算(一维变为特定的二维数组)
+    * 使用Swiper显示轮播, 如何在界面更新之后创建Swiper对象?
+            1). 使用回调+$nextTick()
+            2). 使用watch+$nextTick()	
