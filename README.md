@@ -532,6 +532,7 @@ export const reqShopGoods = () => ajax('/goods')
    ```
   * main.js: 配置store   
 3. 组件异步显示数据
+   * import {mapState} from 'vuex'
    * 在mounted()通过$store.dispatch('actionName')来异步获取后台数据到state中
    * mapState(['xxx'])读取state中数据到组件中
    * 在模板中显示xxx的数据
@@ -589,3 +590,69 @@ export const reqShopGoods = () => ajax('/goods')
     }
   },
  ```
+* 网页里需要显示大量的图片，加载很慢，很长时间才回来，先显示SVG图（像一个轮廓)
+ ```
+<ul class="shop_list" v-if="shops.length">
+
+ <ul v-else>
+      <li v-for="item in 6" :key="item.text">
+         <img src="./images/shop_back.svg" alt="back">
+      </li>
+  ```
+ * Star组件：在div便签内，显示类名，但是有变化'star-'+size，
+ * Star组件：for循环内，starClasses数组根据计算产生，即计算属性
+ ```
+ <template>
+  <div class="star" :class="'star-'+size"> <!--显示类名，但是有变化'star-'+size-->
+    <span class="star-item" v-for="(sc, index) in starClasses" :class="sc" :key="index"></span> <!--starClasses数组根据计算产生，即计算属性-->
+  </div>
+</template>
+
+<script>
+// 类名常量
+const CLASS_ON = 'on'
+const CLASS_HALF = 'half'
+const CLASS_OFF = 'off'
+export default {
+  props: {
+    score: Number,
+    size: Number
+  },
+  computed: {
+    /*
+      3.2: 3 + 0 + 2
+      3.5: 3 + 1 + 1
+       */
+    starClasses () {
+      // 准备好分数
+      const {score} = this
+      const scs = []
+      // 向scs中添加n个CLASS_ON
+      const scoreInteger = Math.floor(score)
+      for (let i = 0; i < scoreInteger; i++) {
+        scs.push(CLASS_ON)
+      }
+      // 向scs中添加0/1个CLASS_HALF
+      if (score * 10 - scoreInteger * 10 >= 5) {
+        scs.push(CLASS_HALF)
+      }
+      // 向scs中添加n个CLASS_OFF
+      while (scs.length < 5) {
+        scs.push(CLASS_OFF)
+      }
+      return scs
+    }
+  }
+}
+</script>
+ ```
+###  登陆/注册: 界面相关效果
+   1. 切换登陆方式
+     * 用一个标识符loginWay来切换登陆方式
+   2. 手机号合法检查
+     * 在获取验证码的按钮上绑定计算属性rightPhone，利用正则表达式判断
+   4. 倒计时效果
+     * 异步获取短信验证码，设置一个函数getCode
+     * 在验证码按钮的文本显示使用三目表达式
+   6. 切换显示或隐藏密码
+   7. 前台验证提示
