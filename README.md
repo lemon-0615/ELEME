@@ -437,7 +437,7 @@ export const reqShopGoods = () => ajax('/goods')
 1. 封装ajax: 
    * promise+axios封装ajax请求的函数
    * 封装每个接口对应的请求函数(能根据接口定义ajax请求函数)
-   * 解决ajax的跨越域问题: 配置代理, 对代理的理解
+   * 解决ajax的跨越域问题: 配置代理, 对代理的理解,对于浏览器而言，不知道代理的存在，浏览器提交的是对当前前台的请求，前台和后台都是运行在各自的服务器上，前台应用服务器还运行着一个代理的代码，前台应用发请求的时候是对前台端口的请求，代理程序拦截请求，向后台端口发送请求，进行转发请求。代理是是一些程序，运行在前台上，监听前台端口
  ```
  proxyTable: {
       '/api': { // 匹配所有以 '/api'开头的请求路径
@@ -546,7 +546,7 @@ export const reqShopGoods = () => ajax('/goods')
    * 使用Swiper显示轮播, 如何在界面更新之后创建Swiper对象?
    
         1). 使用回调+$nextTick()   
-        2). 使用watch+$nextTick()	
+        2). 使用watch+$nextTick()	 进行监视，一旦有数据，进行触发回调
     * vm.$nextTick([callback]) 用法：将回调延迟到下次DOM更新循环之后执行。在修改数据之后立即使用它，然后等待DOM更新。它跟全局方法Vue.nextTick一样，不同的是回调的this自动绑定到调用它的实例上。
     * 注意：一维变为特定的二维数组， 根据categorys一维数组生成一个2维数组，小数组中的元素个数最大是8
    ```
@@ -655,4 +655,45 @@ export default {
    * 异步获取短信验证码，设置一个函数getCode
    * 在验证码按钮的文本显示使用三目表达式
 4. 切换显示或隐藏密码
+   * 在密码的input标签用两个输入框转换显示，文本text和密码password的类型，用v-if，v-else使用布尔值shoPwd进行切换
+   * 用div绘制切换按钮开关，用showPwd的值判断开关状态是on还是off
+   * 开关switch_button off绑定点击事件监听进行切换状态，点一次就进行取反
+   * 开关的圈圈的移动通过样式来实现 &.right transform translateX(30px)
 5. 前台验证提示
+### 前后台交互相关问题
+   1. 如何查看你的应用是否发送某个ajax请求?  
+      * 浏览器的network
+   2. 发ajax请求404
+      * 请求的路径的对
+      * 代理是否生效(配置和重启)
+      * 服务器应用是否运行
+   3. 后台返回了数据, 但页面没有显示?
+      * 检查vuex中是否有
+      * 检查组件中是否读取
+ ### 完成登陆/注册功能
+   1. 2种方式
+      * 手机号/短信验证码登陆
+      * 用户名/密码/图片验证码登陆
+      * 验证码图片绑定点击转换函数，函数中每次指定的src路径要不一样,通过增加日期值改变
+      ```
+      <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha" ref="captcha">
+       // 获取一个新的图片验证码
+      getCaptcha () {
+      // 每次指定的src路径要不一样,通过增加日期值改变
+      this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()
+      }
+     ```
+   2. 登陆的基本流程
+      * 表单前台验证, 如果不通过, 提示
+      * 发送ajax请求, 得到返回的结果
+      * 根据结果的标识(code)来判断登陆请求是否成功
+           1: 不成功, 显示提示
+           0. 成功, 保存用户信息, 返回到上次路由
+   3. vue自定义事件
+      * 绑定监听: @eventName="fn"  function fn (data) {// 处理}
+      * 分发事件: this.$emit('eventName', data)
+   4. 注意:
+      * 使用network查看请求(路径/参数/请求方式/响应数据)
+      * 使用vue的chrome插件查看vuex中的state和组件中的数据
+      * 使用debugger语句调试代码
+      * 实参类型与形参类型的匹配问题       
