@@ -670,25 +670,32 @@ export default {
    3. 后台返回了数据, 但页面没有显示?
       * 检查vuex中是否有
       * 检查组件中是否读取
+   4. 动态一次性短信验证码:用容联云通讯
+     * 使用MD5加密（账户Id + 账户授权令牌 + 时间戳）。其中账户Id和账户授权令牌根据url的验证级别对应主账户。
+        时间戳是当前系统时间，格式"yyyyMMddHHmmss"。时间戳有效时间为24小时，如：20140416142030
+        SigParameter参数需要大写，如不能写成sig=abcdefg而应该写成sig=ABCDEFG
+     * 用Base64编码（账户Id + 冒号 + 时间戳）其中账户Id根据url的验证级别对应主账户，冒号为英文冒号，时间戳是当前系统时间，格式"yyyyMMddHHmmss"，需与SigParameter中时间戳相同。
+     * 发送请求, 并得到返回的结果, 调用callback
  ### 完成登陆/注册功能
    1. 2种方式
       * 手机号/短信验证码登陆
       * 用户名/密码/图片验证码登陆
       * 验证码图片绑定点击转换函数，函数中每次指定的src路径要不一样,通过增加日期值改变
-      ```
+       ```
       <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha" ref="captcha">
        // 获取一个新的图片验证码
       getCaptcha () {
       // 每次指定的src路径要不一样,通过增加日期值改变
       this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()
       }
-     ```
+      ```
    2. 登陆的基本流程
       * 表单前台验证, 如果不通过, 提示
       * 发送ajax请求, 得到返回的结果
       * 根据结果的标识(code)来判断登陆请求是否成功
            1: 不成功, 显示提示
            0. 成功, 保存用户信息, 返回到上次路由
+      * 使用移动端组件库mint-ui
    3. vue自定义事件
       * 绑定监听: @eventName="fn"  function fn (data) {// 处理}
       * 分发事件: this.$emit('eventName', data)
@@ -697,3 +704,35 @@ export default {
       * 使用vue的chrome插件查看vuex中的state和组件中的数据
       * 使用debugger语句调试代码
       * 实参类型与形参类型的匹配问题       
+       
+### 搭建商家整体界面
+   1. 拆分界面路由
+   商家头部ShopHead；商家商品ShopGoods；商家评价ShopRatings；商家信息ShopInfo
+   2. 路由的定义/配置|使用
+### 模拟(mock)数据/接口
+   1. Web 应用前后端(台)分离:
+    * 后台向前台提供 API 接口, 只负责数据的提供和计算，而完全不处理展现
+    * 前台通过 Http(Ajax)请求获取数据, 在浏览器端动态构建界面显示数据
+   2. 设计 JSON 数据结构
+      1).理解 JSON 数据结构
+      *  结构: 名称, 数据类型
+      * value
+      * value 可以变, 但结构不能变
+      2).编写模拟 JSON 数据: src/mock/data.json
+       在商家信息中，主要分为三大块：info,goods,ratings
+   3. 利用 mockjs 提供模拟数据
+      * Mockjs: 用来拦截 ajax 请求, 生成随机数据返回
+      * 使用mockjs提供mock数据接口
+      ```
+      import Mock from 'mockjs'
+      import data from './data.json'
+
+      // 返回goods的接口
+      Mock.mock('/goods', {code: 0, data: data.goods})
+      // 返回ratings的接口
+      Mock.mock('/ratings', {code: 0, data: data.ratings})
+      // 返回info的接口
+      Mock.mock('/info', {code: 0, data: data.info})
+
+      // export default ???  不需要向外暴露任何数据, 只需要保存能执行即可
+       ```
