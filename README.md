@@ -714,12 +714,11 @@ export default {
       + 后台向前台提供 API 接口, 只负责数据的提供和计算，而完全不处理展现
       + 前台通过 Http(Ajax)请求获取数据, 在浏览器端动态构建界面显示数据
   2. 设计 JSON 数据结构
-    1).理解 JSON 数据结构
-   
-    +  结构: 名称, 数据类型
-    +  value
-    +  value 可以变, 但结构不能变
-    2).编写模拟 JSON 数据: src/mock/data.json,在商家信息中，主要分为三大块：info,goods,ratings
+   * 理解 JSON 数据结构
+     +  结构: 名称, 数据类型
+     +  value
+     +  value 可以变, 但结构不能变
+   * 编写模拟 JSON 数据: src/mock/data.json,在商家信息中，主要分为三大块：info,goods,ratings
   3. 利用 mockjs 提供模拟数据
      + Mockjs: 用来拦截 ajax 请求, 生成随机数据返回
      + 使用mockjs提供mock数据接口
