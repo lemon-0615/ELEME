@@ -714,25 +714,24 @@ export default {
       + 后台向前台提供 API 接口, 只负责数据的提供和计算，而完全不处理展现
       + 前台通过 Http(Ajax)请求获取数据, 在浏览器端动态构建界面显示数据
   2. 设计 JSON 数据结构
-   1).理解 JSON 数据结构
+    1).理解 JSON 数据结构
    
-   +  结构: 名称, 数据类型
-   +  value
-   +  value 可以变, 但结构不能变
-  2).编写模拟 JSON 数据: src/mock/data.json,在商家信息中，主要分为三大块：info,goods,ratings
+    +  结构: 名称, 数据类型
+    +  value
+    +  value 可以变, 但结构不能变
+    2).编写模拟 JSON 数据: src/mock/data.json,在商家信息中，主要分为三大块：info,goods,ratings
   3. 利用 mockjs 提供模拟数据
-    + Mockjs: 用来拦截 ajax 请求, 生成随机数据返回
-    + 使用mockjs提供mock数据接口
-    ```
-      import Mock from 'mockjs'
-      import data from './data.json'
+     + Mockjs: 用来拦截 ajax 请求, 生成随机数据返回
+     + 使用mockjs提供mock数据接口
+      ```
+       import Mock from 'mockjs'
+       import data from './data.json'
 
-      // 返回goods的接口
-      Mock.mock('/goods', {code: 0, data: data.goods})
-      // 返回ratings的接口
-      Mock.mock('/ratings', {code: 0, data: data.ratings})
-      // 返回info的接口
-      Mock.mock('/info', {code: 0, data: data.info})
-
-      // export default ???  不需要向外暴露任何数据, 只需要保存能执行即可
-     ```
+       // 返回goods的接口
+       Mock.mock('/goods', {code: 0, data: data.goods})
+       // 返回ratings的接口
+       Mock.mock('/ratings', {code: 0, data: data.ratings})
+       // 返回info的接口
+       Mock.mock('/info', {code: 0, data: data.info})
+       // export default ???  不需要向外暴露任何数据, 只需要保存能执行即可
+      ```
