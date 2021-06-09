@@ -706,24 +706,24 @@ export default {
       * 实参类型与形参类型的匹配问题       
        
 ### 搭建商家整体界面
-   1. 拆分界面路由
-   商家头部ShopHead；商家商品ShopGoods；商家评价ShopRatings；商家信息ShopInfo
-   2. 路由的定义/配置|使用
+  1. 拆分界面路由
+     + 商家头部ShopHead；商家商品ShopGoods；商家评价ShopRatings；商家信息ShopInfo
+  2. 路由的定义/配置|使用
 ### 模拟(mock)数据/接口
-   1. Web 应用前后端(台)分离:
-    * 后台向前台提供 API 接口, 只负责数据的提供和计算，而完全不处理展现
-    * 前台通过 Http(Ajax)请求获取数据, 在浏览器端动态构建界面显示数据
-   2. 设计 JSON 数据结构
-      1).理解 JSON 数据结构
-      *  结构: 名称, 数据类型
-      * value
-      * value 可以变, 但结构不能变
-      2).编写模拟 JSON 数据: src/mock/data.json
-       在商家信息中，主要分为三大块：info,goods,ratings
-   3. 利用 mockjs 提供模拟数据
-      * Mockjs: 用来拦截 ajax 请求, 生成随机数据返回
-      * 使用mockjs提供mock数据接口
-      ```
+  1. Web 应用前后端(台)分离:
+     * 后台向前台提供 API 接口, 只负责数据的提供和计算，而完全不处理展现
+     * 前台通过 Http(Ajax)请求获取数据, 在浏览器端动态构建界面显示数据
+  2. 设计 JSON 数据结构
+    1).理解 JSON 数据结构
+   
+   *  结构: 名称, 数据类型
+   * value
+   * value 可以变, 但结构不能变
+    2).编写模拟 JSON 数据: src/mock/data.json,在商家信息中，主要分为三大块：info,goods,ratings
+  3. 利用 mockjs 提供模拟数据
+   * Mockjs: 用来拦截 ajax 请求, 生成随机数据返回
+   * 使用mockjs提供mock数据接口
+    ```
       import Mock from 'mockjs'
       import data from './data.json'
 
@@ -735,4 +735,4 @@ export default {
       Mock.mock('/info', {code: 0, data: data.info})
 
       // export default ???  不需要向外暴露任何数据, 只需要保存能执行即可
-       ```
+     ```
