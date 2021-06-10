@@ -690,11 +690,11 @@ export default {
       }
       ```
    2. 登陆的基本流程
-      * 表单前台验证, 如果不通过, 提示
+      * 表单前台验证, 如果不通过, 提示(减少请求，减小后台压力)
       * 发送ajax请求, 得到返回的结果
       * 根据结果的标识(code)来判断登陆请求是否成功
            1: 不成功, 显示提示
-           0. 成功, 保存用户信息, 返回到上次路由
+           0. 成功, 保存用户信息，保存在state中的userInfo对象里, 返回到上次路由
       * 使用移动端组件库mint-ui
    3. vue自定义事件
       * 绑定监听: @eventName="fn"  function fn (data) {// 处理}
@@ -709,7 +709,7 @@ export default {
   1. 拆分界面路由
      + 商家头部ShopHead；商家商品ShopGoods；商家评价ShopRatings；商家信息ShopInfo
   2. 路由的定义/配置|使用
-### 模拟(mock)数据/接口
+### 模拟(mock)数据/接口（模拟数据）
   1. Web 应用前后端(台)分离:
       + 后台向前台提供 API 接口, 只负责数据的提供和计算，而完全不处理展现
       + 前台通过 Http(Ajax)请求获取数据, 在浏览器端动态构建界面显示数据
@@ -734,3 +734,54 @@ export default {
        Mock.mock('/info', {code: 0, data: data.info})
        // export default ???  不需要向外暴露任何数据, 只需要保存能执行即可
       ```
+###  ShopHeader组件
+   1. 异步显示数据效果的编码流程
+      * ajax
+          ajax请求函数
+          接口请求函数
+      * vuex
+          state
+          mutation-types
+          actions
+          mutations
+      * 组件
+          dispatch(): 异步获取后台数据到vuex的state
+          mapState(): 从vuex的state中读取对应的数据
+          模板中显示
+      * 多个li标签，通过for循环，类名存放数组中，按顺序存放然后调用显示
+   2. 初始显示异常
+      * 情况1: Cannot read property 'xxx' of undefined"
+       + 原因: 状态里的初始值是对象，对象里的数据是从后台异步获取，初始值是空对象, 内部没有数据, 而模块中直接显示3层表达式
+       + 解决: 避免无数据时候进行了解析，使用v-if指令
+        
+      * 情况2: Cannot read property 'xxx' of null"
+       + 原因：初始值为null，而模块中直接显示两层表达式
+       + 解决初始值为{}
+   3. vue transition动画
+### ShopGoods组件
+   1. 动态展现列表数据
+   2. 基本滑动:
+        使用better-scroll
+        理解其基本原理
+        创建BScroll对象的时机
+          watch + $nextTick()
+          callback + $nextTick
+    3. 滑动右侧列表, 左侧同步更新
+        better-scroll禁用了原生的dom事件, 使用的是自定义事件
+        绑定监听: scroll/scrollEnd
+        滚动监听的类型: probeType
+        列表滑动的3种类型
+            手指触摸
+            惯性
+            编码
+        分析:
+            类名: current 标识当前分类
+            设计一个计算属性: currentIndex
+            根据哪些数据计算?
+              scrollY: 右侧滑动的Y轴坐标 (滑动过程时实时变化)
+              tops: 所有右侧分类li的top组成的数组  (列表第一次显示后就不再变化)
+        编码:
+            1). 在滑动过程中, 实时收集scrollY
+            2). 列表第一次显示后, 收集tops
+            3). 实现currentIndex的计算逻辑
+    4. 点击左侧列表项, 右侧滑动到对应位置
