@@ -763,9 +763,16 @@ export default {
    2. 基本滑动:
         使用better-scroll
         理解其基本原理
+        * 什么时候形成滑动：有一个包裹的div，div的高度是固定的，被指定一个可视区域的固定高度，div里有一个列表ul，一旦ul的高度超过了div的高度就会形成滚动
         创建BScroll对象的时机
           watch + $nextTick()
           callback + $nextTick
+    better-scroll 对外暴露了一个 BScroll 的类，我们初始化只需要 new 一个类的实例即可。第一个参数就是我们 wrapper 的 DOM 对象，第二个是一些配置参数
+    ```
+    let wrapper = document.querySelector('.wrapper') 
+    let scroll = new BScroll(wrapper, {})
+    ```
+    注：better-scroll 的初始化时机很重要，因为它在初始化的时候，会计算父元素和子元素的高度和宽度，来决定是否可以纵向和横向滚动。故在初始化它的时候，必须确保父元素和子元素的内容已经正确渲染了
     3. 滑动右侧列表, 左侧同步更新
         better-scroll禁用了原生的dom事件, 使用的是自定义事件
         绑定监听: scroll/scrollEnd
@@ -776,7 +783,7 @@ export default {
             编码
         分析:
             类名: current 标识当前分类
-            设计一个计算属性: currentIndex
+            设计一个计算属性: currentIndex（找出相关数据，然后想计算的逻辑
             根据哪些数据计算?
               scrollY: 右侧滑动的Y轴坐标 (滑动过程时实时变化)
               tops: 所有右侧分类li的top组成的数组  (列表第一次显示后就不再变化)
@@ -785,3 +792,139 @@ export default {
             2). 列表第一次显示后, 收集tops
             3). 实现currentIndex的计算逻辑
     4. 点击左侧列表项, 右侧滑动到对应位置
+```
+mounted () {
+    this.$store.dispatch('getShopGoods', () => { // 数据更新后执行
+      this.$nextTick(() => { // 列表数据更新显示后执行
+        this._initScroll()
+        this._initTops()
+      })
+    })
+  },
+ methods: {
+    // 初试化滚动条
+    _initScroll () {
+      // 列表显示之后创建
+      /* eslint-disable no-new */
+      new BScroll('.menu-wrapper', {
+        click: true
+      })
+      this.foodsScroll = new BScroll('.foods-wrapper', {
+        probeType: 2, // 因为惯性滑动不会触发
+        click: true
+      })
+      // 给右侧列表绑定scroll监听
+      this.foodsScroll.on('scroll', ({x, y}) => {
+        console.log(x, y)
+        this.scrollY = Math.abs(y)
+      })
+      // 给右侧列表绑定scroll结束的监听
+      this.foodsScroll.on('scrollEnd', ({x, y}) => {
+        console.log('scrollEnd', x, y)
+        this.scrollY = Math.abs(y)
+      })
+    },
+    // 初试化tops
+    _initTops () {
+      // 1. 初始化tops
+      const tops = []
+      let top = 0
+      tops.push(top)
+      // 2. 收集
+      // 找到所有分类的li
+      const lis = this.$refs.foodsUl.getElementsByClassName('food-list-hook')
+      Array.prototype.slice.call(lis).forEach(li => {
+        top += li.clientHeight
+        tops.push(top)
+      })
+      // 3. 更新数据
+      this.tops = tops
+      console.log(tops)
+    },
+    clickMenuItem (index) {
+      // console.log(index)
+      // 使右侧列表滑动到对应的位置
+      // 得到目标位置的scrollY
+      const scrollY = this.tops[index]
+      // 立即更新scrollY(让点击的分类项成为当前分类)
+      this.scrollY = scrollY
+      // 平滑滑动右侧列表
+      this.foodsScroll.scrollTo(0, -scrollY, 300)
+    },
+    // 显示点击的food
+    showFood (food) {
+      // 设置food
+      this.food = food
+      // 显示food组件 (在父组件中调用子组件对象的方法)
+      this.$refs.food.toggleShow()
+    }
+  },
+```
+ * Vue.js 提供了我们一个获取 DOM 对象的接口—— vm.$refs。在这里，我们通过了 this.$refs.*** 访问到了这个 DOM 对象，
+ * 在 mounted 这个钩子函数里，this.$nextTick 的回调函数中初始化 better-scroll
+ * 数据绑定：更新了数据，对应的界面发生改变
+    
+### CartControl组件
+   1. 问题: 更新状态数据, 对应的界面不变化
+     * 原因: 一般方法给一个已有绑定的对象中添加一个新的属性, 这个属性没有数据绑定
+     * 解决: Vue.set(obj, 'xxx', value)才有数据绑定
+             this.$set(obj, 'xxx', value)才有数据绑定
+### ShopCart组件
+   1. 使用vuex管理购物项数据: cartFoods
+   2. 解决几个功能性bug(购物车打开条件：isshow为true，
+     * 如果购物车的总数量为0, 直接不显示，用计算属性listshow
+     * 数量为0后购物车关闭了，但是ishow还是true，导致下一次加food的时候购物车又马上弹出来：totalCount为0的时候，让this.isShow = false
+     * 点击了一下下栏的购物车之后也导致了ishow为true：只有当总数量大于0时切换，this.totalCount>0的时候，this.isShow = !this.isShow
+     ```
+       <div class="shopcart-list" v-show="listShow">
+       <div class="list-mask" v-show="listShow" @click="toggleShow"></div>
+       listShow: {
+      // 如果总数量为0, 直接不显示
+      get () {
+        if (this.totalCount === 0) {
+          return false
+        }
+        return this.isShow
+      },
+      set () {
+        if (!this.totalCount) {
+          this.isShow = false
+        }
+        if (!this.isShow) {
+          this.$nextTick(() => {
+          // 实现BScroll的实例是一个单例
+            if (!this.scroll) {
+              this.scroll = new BScroll('.list-content', {
+                click: true
+              })
+            } else {
+              this.scroll.refresh() // 让滚动条刷新一下: 重新统计内容的高度
+            }
+          })
+        }
+      }
+     }
+    //方法 
+    toggleShow () {
+        // 只有当总数量大于0时切换
+        if(this.totalCount>0) {
+          this.isShow = !this.isShow
+        }
+      },
+   ```
+   4. 界面的展现是根据数据展现的
+   5. 购物车列表的滑动
+
+   6. 清空购物车
+        ```
+        在mutations.js中
+         // 清除food中的count
+        state.cartFoods.forEach(food => { food.count = 0 })
+        // 移除购物车中所有购物项
+       state.cartFoods = []
+       ```
+### Food组件
+   1. 父子组件:
+        子组件调用父组件的方法: 通过props将方法传递给子组件
+        父组件调用子组件的方法: 通过ref找到子组件标签对象
+   2. 事件冒泡，阻止事件冒泡事件，在点击监听里加stop，即@click.stop
