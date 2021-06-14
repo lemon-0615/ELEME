@@ -52,7 +52,7 @@ export default new VueRouter({
     {
       path: '/shop',
       component: Shop,
-      childern: [
+      children: [
         {
           path: '/shop/goods',
           component: ShopGoods
@@ -64,6 +64,10 @@ export default new VueRouter({
         {
           path: '/shop/info',
           component: ShopInfo
+        },
+        {
+          path: '',
+          redirect: '/shop/goods'
         }
       ]
     }
