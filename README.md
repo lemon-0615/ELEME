@@ -930,7 +930,6 @@ mounted () {
    2. 事件冒泡，阻止事件冒泡事件，在点击监听里加stop，即@click.stop
 ### ShopRatings组件
    1. 列表的过滤显示
-   
    2. 自定义过滤器
     * 用数值selectType的0，1，2的值分别代表不满意，满意，全部评价
     * 布尔值onlyShowText表示是否只显示有文本的
@@ -938,33 +937,33 @@ mounted () {
     * 条件1：selectType: 0/1/2 or rateType: 0/1 即 selectType===2 || selectType===rateType
     * 条件2： onlyShowText: true/false or text: 有值/没值 即 !onlyShowText || text.length>0
     * 最后返回  return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
-  ```
-   filterRatings () {
-      // 得到相关数据
-      const {ratings, onlyShowText, selectType} = this
-      // 产生一个过滤新数组
-      return ratings.filter(rating => {
-        const {rateType, text} = rating
-        return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
-      })
-    }
-  ```
+       ```
+       filterRatings () {
+          // 得到相关数据
+          const {ratings, onlyShowText, selectType} = this
+          // 产生一个过滤新数组
+          return ratings.filter(rating => {
+            const {rateType, text} = rating
+            return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
+          })
+        }
+       ```
 ### ShopInfo组件
    1. 使用better-scroll实现两个方向的滑动：
-      ``` 
-      new BScroll('.shop-info')
-      new BScroll('.pic-wrapper', {
-        scrollX: true // 水平滑动
-      })
-      ```
+        ``` 
+          new BScroll('.shop-info')
+          new BScroll('.pic-wrapper', {
+            scrollX: true // 水平滑动
+          })
+        ```
    2. 通过JS动态操作样式
         ```
-       // 动态计算ul的宽度
-        const ul = this.$refs.picsUl
-        const liWidth = 120
-        const space = 6
-        const count = this.info.pics.length
-        ul.style.width = (liWidth + space) * count - space + 'px'
+         // 动态计算ul的宽度
+          const ul = this.$refs.picsUl
+          const liWidth = 120
+          const space = 6
+          const count = this.info.pics.length
+          ul.style.width = (liWidth + space) * count - space + 'px'
        ```
    3. 解决当前路由刷新异常的bug
     * 数据是异步获取的，会导致一开始this.info.pics为null
@@ -982,9 +981,14 @@ mounted () {
 ### Search组件
    1. 根据关键字来异步搜索显示匹配的商家列表(形成带列表的多个路由路径
    2. 实现没有搜索结果的提示显示(用一个标视变量来实现，布尔值的noSearchShops，初始值为false，有searchShops的值的时候，值为true(在watch里进行变化))
-##  项目优化
-### 缓存路由组件对象
- 1
-### 路由组件懒加载
-### 图片司加载: vue-lazyload
-### 分析打包文件并优化     
+###  项目优化
+   1. 缓存路由组件对象，复用路由组件对象, 复用路由组件获取的后台数据
+        ```
+         在shop.vue组件里
+         <keep-alive>
+           <router-view />
+         </keep-alive>
+        ```
+   2. 路由组件懒加载
+   3. 图片司加载: vue-lazyload
+   4. 分析打包文件并优化     
