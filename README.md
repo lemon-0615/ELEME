@@ -678,17 +678,17 @@ export default {
      * 发送请求, 并得到返回的结果, 调用callback
  ### 完成登陆/注册功能
    1. 2种方式
-      * 手机号/短信验证码登陆
-      * 用户名/密码/图片验证码登陆
-      * 验证码图片绑定点击转换函数，函数中每次指定的src路径要不一样,通过增加日期值改变
-          ```
-            <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha" ref="captcha">
-             // 获取一个新的图片验证码
-            getCaptcha () {
-            // 每次指定的src路径要不一样,通过增加日期值改变
-            this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()
-            }
-          ```
+       * 手机号/短信验证码登陆
+       * 用户名/密码/图片验证码登陆
+       * 验证码图片绑定点击转换函数，函数中每次指定的src路径要不一样,通过增加日期值改变
+           ```
+              <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha" ref="captcha">
+               // 获取一个新的图片验证码
+              getCaptcha () {
+              // 每次指定的src路径要不一样,通过增加日期值改变
+              this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()
+               }
+            ```
    2. 登陆的基本流程
       * 表单前台验证, 如果不通过, 提示(减少请求，减小后台压力)
       * 发送ajax请求, 得到返回的结果
@@ -761,18 +761,18 @@ export default {
 ### ShopGoods组件
    1. 动态展现列表数据
    2. 基本滑动:
-        使用better-scroll
-        理解其基本原理
-        * 什么时候形成滑动：有一个包裹的div，div的高度是固定的，被指定一个可视区域的固定高度，div里有一个列表ul，一旦ul的高度超过了div的高度就会形成滚动
-        创建BScroll对象的时机
-          watch + $nextTick()
-          callback + $nextTick
-    better-scroll 对外暴露了一个 BScroll 的类，我们初始化只需要 new 一个类的实例即可。第一个参数就是我们 wrapper 的 DOM 对象，第二个是一些配置参数
-    ```
-    let wrapper = document.querySelector('.wrapper') 
-    let scroll = new BScroll(wrapper, {})
-    ```
-    注：better-scroll 的初始化时机很重要，因为它在初始化的时候，会计算父元素和子元素的高度和宽度，来决定是否可以纵向和横向滚动。故在初始化它的时候，必须确保父元素和子元素的内容已经正确渲染了
+        * 使用better-scroll
+        * 理解其基本原理
+         * 什么时候形成滑动：有一个包裹的div，div的高度是固定的，被指定一个可视区域的固定高度，div里有一个列表ul，一旦ul的高度超过了div的高度就会形成滚动
+        *  创建BScroll对象的时机
+          * watch + $nextTick()
+          * callback + $nextTick
+    * better-scroll 对外暴露了一个 BScroll 的类，我们初始化只需要 new 一个类的实例即可。第一个参数就是我们 wrapper 的 DOM 对象，第二个是一些配置参数
+           ```
+            let wrapper = document.querySelector('.wrapper') 
+            let scroll = new BScroll(wrapper, {})
+           ```
+     * better-scroll 的初始化时机很重要，因为它在初始化的时候，会计算父元素和子元素的高度和宽度，来决定是否可以纵向和横向滚动。故在初始化它的时候，必须确保父元素和子元素的内容已经正确渲染了
     3. 滑动右侧列表, 左侧同步更新
         better-scroll禁用了原生的dom事件, 使用的是自定义事件
         绑定监听: scroll/scrollEnd
