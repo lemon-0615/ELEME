@@ -930,23 +930,23 @@ export default {
 ### ShopRatings组件
    1. 列表的过滤显示
    2. 自定义过滤器
-     * 用数值selectType的0，1，2的值分别代表不满意，满意，全部评价
-     * 布尔值onlyShowText表示是否只显示有文本的
-     * 得到相关数据，产生一个过滤新数组
-     * 条件1：selectType: 0/1/2 or rateType: 0/1 即 selectType===2 || selectType===rateType
-     * 条件2： onlyShowText: true/false or text: 有值/没值 即 !onlyShowText || text.length>0
-     * 最后返回  return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
-           ```
-             filterRatings () {
-                // 得到相关数据
-                const {ratings, onlyShowText, selectType} = this
-                // 产生一个过滤新数组
-                return ratings.filter(rating => {
-                  const {rateType, text} = rating
-                  return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
+      *  用数值selectType的0，1，2的值分别代表不满意，满意，全部评价
+      *  布尔值onlyShowText表示是否只显示有文本的
+      *  得到相关数据，产生一个过滤新数组
+      *  条件1：selectType: 0/1/2 or rateType: 0/1 即 selectType===2 || selectType===rateType
+      *  条件2： onlyShowText: true/false or text: 有值/没值 即 !onlyShowText || text.length>0
+      *  最后返回  return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
+        ```
+           filterRatings () {
+              // 得到相关数据
+              const {ratings, onlyShowText, selectType} = this
+              // 产生一个过滤新数组
+              return ratings.filter(rating => {
+                const {rateType, text} = rating
+                 return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
                 })
-              }
-           ```
+             }
+        ```
 ### ShopInfo组件
    1. 使用better-scroll实现两个方向的滑动：
          ``` 
