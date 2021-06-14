@@ -671,11 +671,11 @@ export default {
       * 检查vuex中是否有
       * 检查组件中是否读取
    4. 动态一次性短信验证码:用容联云通讯
-      * 使用MD5加密（账户Id + 账户授权令牌 + 时间戳）。其中账户Id和账户授权令牌根据url的验证级别对应主账户。
+       * 使用MD5加密（账户Id + 账户授权令牌 + 时间戳）。其中账户Id和账户授权令牌根据url的验证级别对应主账户。
        * 时间戳是当前系统时间，格式"yyyyMMddHHmmss"。时间戳有效时间为24小时，如：20140416142030
        * SigParameter参数需要大写，如不能写成sig=abcdefg而应该写成sig=ABCDEFG
-      * 用Base64编码（账户Id + 冒号 + 时间戳）其中账户Id根据url的验证级别对应主账户，冒号为英文冒号，时间戳是当前系统时间，格式"yyyyMMddHHmmss"，需与SigParameter中时间戳相同。
-      * 发送请求, 并得到返回的结果, 调用callback
+       * 用Base64编码（账户Id + 冒号 + 时间戳）其中账户Id根据url的验证级别对应主账户，冒号为英文冒号，时间戳是当前系统时间，格式"yyyyMMddHHmmss"，需与SigParameter中时间戳相同。
+       * 发送请求, 并得到返回的结果, 调用callback
  ### 完成登陆/注册功能
    1. 2种方式
        * 手机号/短信验证码登陆
@@ -928,25 +928,25 @@ export default {
         父组件调用子组件的方法: 通过ref找到子组件标签对象
    2. 事件冒泡，阻止事件冒泡事件，在点击监听里加stop，即@click.stop
 ### ShopRatings组件
-   1. 列表的过滤显示
-   2. 自定义过滤器
-     * 用数值selectType的0，1，2的值分别代表不满意，满意，全部评价
-     * 布尔值onlyShowText表示是否只显示有文本的
-     * 得到相关数据，产生一个过滤新数组
-     * 条件1：selectType: 0/1/2 or rateType: 0/1 即 selectType===2 || selectType===rateType
-     * 条件2： onlyShowText: true/false or text: 有值/没值 即 !onlyShowText || text.length>0
-     * 最后返回  return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
-         ```
-           filterRatings () {
-              // 得到相关数据
-              const {ratings, onlyShowText, selectType} = this
-              // 产生一个过滤新数组
-              return ratings.filter(rating => {
-                const {rateType, text} = rating
-                return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
-              })
-            }
-         ```
+  1. 列表的过滤显示
+  2. 自定义过滤器
+    * 用数值selectType的0，1，2的值分别代表不满意，满意，全部评价
+    * 布尔值onlyShowText表示是否只显示有文本的
+    * 得到相关数据，产生一个过滤新数组
+    * 条件1：selectType: 0/1/2 or rateType: 0/1 即 selectType===2 || selectType===rateType
+    * 条件2： onlyShowText: true/false or text: 有值/没值 即 !onlyShowText || text.length>0
+    * 最后返回  return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
+           ```
+             filterRatings () {
+                // 得到相关数据
+                const {ratings, onlyShowText, selectType} = this
+                // 产生一个过滤新数组
+                return ratings.filter(rating => {
+                  const {rateType, text} = rating
+                  return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
+                })
+              }
+           ```
 ### ShopInfo组件
    1. 使用better-scroll实现两个方向的滑动：
          ``` 
