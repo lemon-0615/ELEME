@@ -984,5 +984,36 @@ export default {
            </keep-alive>
          ```
    2. 路由组件懒加载
-   3. 图片司加载: vue-lazyload
+    * 使用replace模式实现路由跳转 <router-link to="/shop/goods" replace>点餐</router-link>
+    * 路由组件的函数，只有执行函数的时候才会加载路由组件
+           ```
+          const MSite = () => import('../pages/MSite/MSite.vue')
+          const Search = () => import('../pages/Search/Search.vue')
+          const Order = () => import('../pages/Order/Order.vue')
+          const Profile = () => import('../pages/Profile/Profile.vue')
+           ```
+   3. 图片懒加载: vue-lazyload使用
+      * 下载包npm install --save vue-loader
+      * 在main.js里引入
+          ```
+          import VueLazyload from 'vue-lazyload'
+          import loading from './common/img/loading.gif'
+          Vue.use(VueLazyload, {
+          loading
+          })
+          <img v-lazy="food.image">
+          ```
    4. 分析打包文件并优化     
+     * vue 脚手架提供了一个用于可视化分析打包文件的包 webpack-bundle-analyzer 和配置
+     * 启用打包可视化: npm run build --report
+     * 使用 date-fns 代替 moment
+       ```
+        // import moment from 'moment'
+        // import {format} from 'date-fns'
+        import format from 'date-fns/format'
+        import Vue from 'vue'
+        Vue.filter('dateString', function (value, formatStr) {
+        // return moment(value).format(format || 'YYYY-MM-DD HH:mm:ss')
+        return format(value, formatStr || 'YYYY-MM-DD HH:mm:ss')
+        })
+       ```
