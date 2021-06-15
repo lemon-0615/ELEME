@@ -986,6 +986,7 @@ export default {
    2. 路由组件懒加载
       * 使用replace模式实现路由跳转 <router-link to="/shop/goods" replace>点餐</router-link>
       * 路由组件的函数，只有执行函数的时候才会加载路由组件
+      
             ```
             const MSite = () => import('../pages/MSite/MSite.vue')
             const Search = () => import('../pages/Search/Search.vue')
