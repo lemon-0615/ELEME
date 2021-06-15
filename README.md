@@ -984,14 +984,14 @@ export default {
            </keep-alive>
          ```
    2. 路由组件懒加载
-     * 使用replace模式实现路由跳转 <router-link to="/shop/goods" replace>点餐</router-link>
-     * 路由组件的函数，只有执行函数的时候才会加载路由组件
-          ```
-          const MSite = () => import('../pages/MSite/MSite.vue')
-          const Search = () => import('../pages/Search/Search.vue')
-          const Order = () => import('../pages/Order/Order.vue')
-          const Profile = () => import('../pages/Profile/Profile.vue')
-          ```
+      * 使用replace模式实现路由跳转 <router-link to="/shop/goods" replace>点餐</router-link>
+      * 路由组件的函数，只有执行函数的时候才会加载路由组件
+            ```
+            const MSite = () => import('../pages/MSite/MSite.vue')
+            const Search = () => import('../pages/Search/Search.vue')
+            const Order = () => import('../pages/Order/Order.vue')
+            const Profile = () => import('../pages/Profile/Profile.vue')
+            ```
    3. 图片懒加载: vue-lazyload使用
       * 下载包npm install --save vue-loader
       * 在main.js里引入
