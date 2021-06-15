@@ -944,12 +944,12 @@ export default {
         ```
 ### ShopInfo组件
    1. 使用better-scroll实现两个方向的滑动：
-         ``` 
+          ```
             new BScroll('.shop-info')
             new BScroll('.pic-wrapper', {
               scrollX: true // 水平滑动
              })
-        ```
+          ```
    2. 通过JS动态操作样式
         ```
           // 动态计算ul的宽度
