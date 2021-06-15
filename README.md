@@ -1004,16 +1004,16 @@ export default {
           <img v-lazy="food.image">
           ```
    4. 分析打包文件并优化     
-     * vue 脚手架提供了一个用于可视化分析打包文件的包 webpack-bundle-analyzer 和配置
-     * 启用打包可视化: npm run build --report
-     * 使用 date-fns 代替 moment
-       ```
-        // import moment from 'moment'
-        // import {format} from 'date-fns'
-        import format from 'date-fns/format'
-        import Vue from 'vue'
-        Vue.filter('dateString', function (value, formatStr) {
-        // return moment(value).format(format || 'YYYY-MM-DD HH:mm:ss')
-        return format(value, formatStr || 'YYYY-MM-DD HH:mm:ss')
-        })
-       ```
+      * vue 脚手架提供了一个用于可视化分析打包文件的包 webpack-bundle-analyzer 和配置
+      * 启用打包可视化: npm run build --report
+      * 使用 date-fns 代替 moment
+           ```
+            // import moment from 'moment'
+            // import {format} from 'date-fns'
+            import format from 'date-fns/format'
+            import Vue from 'vue'
+            Vue.filter('dateString', function (value, formatStr) {
+            // return moment(value).format(format || 'YYYY-MM-DD HH:mm:ss')
+            return format(value, formatStr || 'YYYY-MM-DD HH:mm:ss')
+            })
+           ```
