@@ -493,6 +493,12 @@ export default {
         * 定义异步action: async/await
         * 流程: 发ajax获取数据, commit给mutation     
       ```
+       //引入api接口，取出数据
+       import {
+            reqAddress,
+            reqFoodCategorys,
+            reqShops,
+          } from '../api'
         // 异步获取地址
         async getAddress ({commit, state}) {
         // 发送异步ajax请求
@@ -505,12 +511,31 @@ export default {
           }
         }     
       ```
-   * 实现mutations: 给状态赋值  
+   * 实现mutations: 给状态赋值，通过mutation间接更新state的多个方法的对象  
      ```
-       [RECEIVE_ADDRESS] (state, {address}) {
-        state.address = address
-       },
+       import {
+          RECEIVE_ADDRESS,
+          RECEIVE_CATEGORYS,
+          RECEIVE_SHOPS,
+        } from './mutation-types'
+       export default {
+        [RECEIVE_ADDRESS] (state, {address}) {
+          state.address = address
+        },
+        [RECEIVE_CATEGORYS] (state, {categorys}) {
+          state.categorys = categorys
+        },
+        [RECEIVE_SHOPS] (state, {shops}) {
+          state.shops = shops
+        },
+       }
      ```
+   * mutation-types ：包含n个mutation的type名称常量
+       ```
+       export const RECEIVE_ADDRESS = 'receive_address' // 接收地址
+       export const RECEIVE_CATEGORYS = 'receive_categorys' // 接收食品分类数组
+       export const RECEIVE_SHOPS = 'receive_shops' // 接收商家数组
+        ```
    * 实现index: 创建store对象
        ```
        /* vuex最核心的管理对象store */
