@@ -1018,3 +1018,74 @@ export default {
             return format(value, formatStr || 'YYYY-MM-DD HH:mm:ss')
             })
            ```
+## banner图效果实现图片自动滚动
+  ### 原理
+   * 移动的区块包含图片内容，区块相对父级元素进行定位脱离文档流。
+   * 再令区块的left值每隔固定的时间进行等量减少(或增大)从而实现区块的匀速运动。由于每次间隔移动的时间设置很短，会“欺骗”人的眼睛，形成无缝滚动效果
+   * 脱离文档流：父元素为相对定位position:relative，区块为绝对定位;position:absolute
+   * 每隔固定时间进行left的变化：使用函数setInterval();
+   * 设置HTML文档以及样式：滚动区域宽度=图片宽度x图片数目
+   * 设置div，ul，li，img存放图片，然后设置样式，给div元素中设置overflow:hidden，图片内容若超出了给定的宽度和高度属性，那么超出的部分将会被隐藏，不占位
+  ### 实现
+   * 父级div标签relative，子级ul标签position，无论浏览器如何改变，都是相对浏览器的定位
+   * js代码，通过document.getElementById拿到ul和div标签
+   * 把这四张图片重复再添加到末尾，实现循环效果oUl1.innerHTML += oUl1.innerHTML;
+   * 重新设置一下ul的宽,8张图oUl1.style.width = 220 * 8 + 'px';
+   * 设置定时器，每两秒进行移动，改变ul的left的值oUl1.style.left = oUl1.offsetLeft - 5 + 'px';
+   * 在ul的left值减少至一个oDiv1宽度值时(刚好四个图片偏移完毕)，令其left值归零，重新开始oUl的left值偏移。
+        ```
+             <!DOCTYPE html>
+          <html lang="en">
+              <head>
+                  <meta charset="UTF-8"/>
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+                  <title>Document</title>
+                  <style>
+                      *{margin: 0px; padding: 0px}
+                      #ul1 li{list-style: none; width: 200px; height: 200px; margin: 10px; float: left;}
+                      #ul1 li img{width: 100%; height: 100%}
+                      #ul1 {position: absolute; left: 0px}
+                      #div1{width: 880px; height: 220px; border: 1px solid black; margin: 150px auto; position: relative; overflow: hidden;}
+                  </style>
+                  <script>
+                      window.onload = function(){
+                          var oUl1 = document.getElementById("ul1");
+                          var oDiv1 = document.getElementById("div1");
+
+                          /* 
+                              直接把这四张图片再添加到末尾
+                          */
+                          oUl1.innerHTML += oUl1.innerHTML;
+                          //重新设置一下ul的宽,8张图
+                          oUl1.style.width = 220 * 8 + 'px';
+
+                          setInterval(function(){
+                              oUl1.style.left = oUl1.offsetLeft - 5 + 'px';
+                              if(oUl1.offsetLeft <= -oUl1.offsetWidth / 2){
+                                  oUl1.style.left = "0px";
+                              }
+                          }, 30);
+                      }
+                  </script>
+              </head>
+              <body>
+                  <div id = 'div1'>
+                      <ul id = 'ul1'>
+                          <li>
+                              <img src="img/1.jpg" alt=""/>
+                          </li>
+                          <li>
+                              <img src="img/2.jpg" alt=""/>
+                          </li>
+                          <li>
+                              <img src="img/3.jpg" alt=""/>
+                          </li>
+                          <li>
+                              <img src="img/4.jpg" alt=""/>
+                          </li>
+                      </ul>
+                  </div>
+              </body>
+            </html>
+        ```
