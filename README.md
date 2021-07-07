@@ -433,6 +433,68 @@ export default {
     export const reqShopGoods = () => ajax('/goods')
   ```
 
+### swiper使用实现轮播效果
+1. 首先加载插件，需要用到的文件有swiper-bundle.min.js和swiper-bundle.min.css文件，不同Swiper版本用到的文件名略有不同。
+      ```
+        <!DOCTYPE html>
+      <html>
+      <head>
+          ...
+          <link rel="stylesheet" href="path/to/swiper.min.css">
+      </head>
+      <body>
+          ...
+          <script src="path/to/swiper.min.js"></script>
+      </body>
+      </html>
+      ```
+2. HTML内容
+      ```
+       <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">Slide 1</div>
+            <div class="swiper-slide">Slide 2</div>
+            <div class="swiper-slide">Slide 3</div>
+        </div>
+        <!-- 如果需要分页器 -->
+        <div class="swiper-pagination"></div>
+
+        <!-- 如果需要导航按钮 -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+
+        <!-- 如果需要滚动条 -->
+        <div class="swiper-scrollbar"></div>
+     </div>
+    ```
+ 3. 你可能想要给Swiper定义一个大小，当然不要也行。
+ 4. 初始化Swiper
+      ```
+      <script>        
+        var mySwiper = new Swiper ('.swiper-container', {
+          direction: 'vertical', // 垂直切换选项
+          loop: true, // 循环模式选项
+
+          // 如果需要分页器
+          pagination: {
+            el: '.swiper-pagination',
+          },
+
+          // 如果需要前进后退按钮
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+
+          // 如果需要滚动条
+          scrollbar: {
+            el: '.swiper-scrollbar',
+          },
+        })        
+        </script>
+      ```
+
+导航等组件可以放在container之外
 ### 异步处理
 1. 封装ajax: 
    * promise+axios封装ajax请求的函数
@@ -472,7 +534,7 @@ export default {
           getters
           })
        ```
-     * 设计state: 从后台获取的数据
+    * 设计state: 从后台获取的数据
     ```
        export default {
           latitude: 40.10038, // 纬度
@@ -558,7 +620,7 @@ export default {
   * main.js: 配置store   
 3. 组件异步显示数据
    * import {mapState} from 'vuex'
-   * 在mounted()通过$store.dispatch('actionName')来异步获取后台数据到state中
+   * 在mounted()通过$store.dispatch('actionName')来异步获取后台数据到state中,也可以用this.actionName()来异步获取后台数据到state中
    * mapState(['xxx'])读取state中数据到组件中
    * 在模板中显示xxx的数据
 4. 模板中显示数据的来源
@@ -569,11 +631,11 @@ export default {
    * 通过vuex获取foodCategorys数组(发请求, 读取)
    * 对数据进行整合计算(一维变为特定的二维数组)
    * 使用Swiper显示轮播, 如何在界面更新之后创建Swiper对象?
-   
         1). 使用回调+$nextTick()   
         2). 使用watch+$nextTick()	 进行监视，一旦有数据，进行触发回调
     * vm.$nextTick([callback]) 用法：将回调延迟到下次DOM更新循环之后执行。在修改数据之后立即使用它，然后等待DOM更新。它跟全局方法Vue.nextTick一样，不同的是回调的this自动绑定到调用它的实例上。
     * 注意：一维变为特定的二维数组， 根据categorys一维数组生成一个2维数组，小数组中的元素个数最大是8
+    * 在循环里，首先判断小数组minArr长度是否为8，若为8，重新创建一个空的小数组，然后判断小数组minArr长度是否为0，若为0，将小数组保存到大数组中（顺序很重要）
          ```
             categorysArr () {
               const {categorys} = this
