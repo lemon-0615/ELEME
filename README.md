@@ -659,7 +659,7 @@ export default {
               return arr
             }
         ```
-    * 注意：监视列表categorys函数， categorys数组中有了数据，在异步更新界面之前执行
+    * 注意：监视列表categorys函数， categorys数组中有了数据，但是界面还没有更新，先是有了数据，才会异步更新界面，为了让在异步更新界面之后执行，用setTimeout，不合适，因为无法准确知道界面更新的时间，用nextTick(), 界面更新就立即创建Swiper对象
       ```
         watch: {
           categorys (value) { // categorys数组中有了数据，在异步更新界面之前执行
@@ -677,7 +677,7 @@ export default {
           }
         },
       ```
-* 网页里需要显示大量的图片，加载很慢，很长时间才回来，先显示SVG图（像一个轮廓)
+* 网页里需要显示大量的图片，加载很慢，很长时间才回来，可以先显示SVG图，它像一个轮廓
     ```
     <ul class="shop_list" v-if="shops.length">
 
